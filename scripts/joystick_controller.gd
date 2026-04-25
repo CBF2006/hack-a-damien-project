@@ -32,6 +32,11 @@ signal action_pressed(action_name: String)
 ## Keeps stale inputs from poisoning future combos.
 @export var combo_reset_timeout := 1.2
 
+# ─── Serial Bridge Config ──────────────────────────────────────────────────────
+@export var bridge_host := "127.0.0.1"
+@export var bridge_port := 5555
+@export var serial_reconnect_interval := 2.0
+
 # ─── State ─────────────────────────────────────────────────────────────────────
 var is_held := false                     # Tracking if mouse/touch is currently pressed
 var origin := Vector2.ZERO               # Screen coordinate where the press started
@@ -50,6 +55,14 @@ var _is_free_moving := false             # True if user held long enough to exit
 var _pending_combo: String = ""
 var _combo_confirm_timer: SceneTreeTimer = null
 var _combo_reset_timer:   SceneTreeTimer = null
+
+# ─── Serial Bridge State ──────────────────────────────────────────────────────
+var _serial_peer: StreamPeerTCP = null
+var _serial_connected := false
+var _serial_buffer := ""
+var _serial_reconnect_timer := 0.0
+var _serial_prev_btn := false
+var _serial_prev_dir := Vector2.ZERO
 
 # ─── Combos ────────────────────────────────────────────────────────────────────
 # Longer combos MUST be listed before shorter prefix-sharing ones so that
@@ -70,7 +83,6 @@ var _sorted_combos: Array = []
 # ─── Ready ─────────────────────────────────────────────────────────────────────
 func _ready() -> void:
 	# Pre-sort combo keys longest-first so _find_best_match is deterministic.
-	# This ensures if we input "Left, Left, Right", we check if "Left, Left, Right, Right" matches first.
 	_sorted_combos = combos.keys()
 	_sorted_combos.sort_custom(func(a, b): return a.size() > b.size())
 
@@ -82,7 +94,7 @@ func _ready() -> void:
 		print_rich("[color=white]flick_threshold: %s | flick_cooldown: %s[/color]" % [flick_threshold, flick_cooldown])
 		print_rich("[color=white]combo_max_length: %s | input_gap: %s[/color]" % [combo_max_length, input_gap])
 		print_rich("[color=white]combo_confirm_delay: %s | combo_reset_timeout: %s[/color]" % [combo_confirm_delay, combo_reset_timeout])
-		print_rich("[color=white]Mouse, touch, arrow keys, Joy-Con all active[/color]")
+		print_rich("[color=white]Mouse, touch, arrow keys, Joy-Con, MSP430 serial all active[/color]")
 		print_rich("[color=white]──────────────────────────────[/color]")
 		
 		# Connect local signals to debug printers
@@ -92,6 +104,9 @@ func _ready() -> void:
 		# Run a test simulation after a brief delay
 		await get_tree().create_timer(simulate_combo_delay).timeout
 		_simulate_combo(["up", "up"])
+
+	# Connect to the serial bridge (MSP430)
+	_serial_connect()
 
 # ─── Mouse + Touch ─────────────────────────────────────────────────────────────
 func _input(event: InputEvent) -> void:
@@ -159,6 +174,8 @@ func _handle_release_flick(source: String) -> void:
 
 # ─── Joy-Con / Analog Stick ─────────────────────────────────────────────────────
 func _process(delta: float) -> void:
+	# Process MSP430 serial input first
+	_serial_process(delta)
 	
 	# 1. Fetch combined axis values from input map
 	var stick := Vector2(
@@ -168,7 +185,7 @@ func _process(delta: float) -> void:
 
 	# 2. Update current_dir based on stick movement
 	if stick.length() > joy_con_dead_zone:
-		current_dir = stick.normalized() # THIS was missing!
+		current_dir = stick.normalized()
 		_last_logged_dir = current_dir
 		_press_time += delta
 
@@ -198,7 +215,7 @@ func _process(delta: float) -> void:
 		_press_time = 0.0
 		_is_free_moving = false
 		_held_timer = 0.0
-		current_dir = Vector2.ZERO # Stop moving when stick is released
+		current_dir = Vector2.ZERO
 
 	# 3. Handle Mouse/Touch logic (if currently holding)
 	if is_held:
@@ -221,107 +238,6 @@ func _process(delta: float) -> void:
 		var viewport_size = get_viewport_rect().size
 		knob.global_position.x = clamp(knob.global_position.x, 0, viewport_size.x)
 		knob.global_position.y = clamp(knob.global_position.y, 0, viewport_size.y)
-		
-	# Debug print to verify it's working
-	#if debug_mode and current_dir != Vector2.ZERO:
-		#print("Moving: ", current_dir, " | Pos: ", knob.global_position)
-		
-	#
-	#print("Current Dir: ", current_dir, " | Knob Pos: ", knob.position)
-	#
-	##if Input.is_action_pressed("ui_right"):
-		##print("UI_RIGHT is being detected!")
-	##if Input.is_action_pressed("ui_left"):
-		##print("UI_LEFT is being detected!")
-	##if Input.is_action_pressed("ui_up"):
-		##print("UI_UP is being detected!")
-	##if Input.is_action_pressed("ui_down"):
-		##print("UI_DOWN is being detected!")
-	#
-	#
-	## TODO Uncomment after testing
-	#
-		## Fetch combined axis values from ui_left/right/up/down input map
-	#var stick := Vector2(
-		#Input.get_axis("ui_left", "ui_right"),
-		#Input.get_axis("ui_up", "ui_down")
-	#)
-#
-	## If the stick is tilted past the dead zone
-	#if stick.length() > joy_con_dead_zone:
-		#_press_time += delta
-		#_last_logged_dir = stick.normalized()
-#
-		## If held longer than the flick threshold, it's continuous movement
-		#if _press_time > flick_threshold:
-			#if not _is_free_moving:
-				#_is_free_moving = true
-				#if debug_mode:
-					#print_rich("[color=yellow]MODE: free move[/color]")
-#
-			## Emit direction signals at fixed intervals
-			#_held_timer += delta
-			#if _held_timer >= held_move_interval:
-				#_held_timer = 0.0
-				#emit_signal("direction_changed", stick.normalized())
-#
-	#else:
-		## Stick returned to center: Check if it was a quick flick before resetting
-		#if _press_time > 0.0 and _press_time < flick_threshold:
-			#if not _flick_on_cooldown and _last_logged_dir != Vector2.ZERO:
-				#var action = _dir_to_action(_last_logged_dir)
-				#if debug_mode:
-					#print_rich("[color=magenta]FLICK (joy-con): %s[/color]" % action)
-				#emit_signal("action_pressed", action)
-				#_start_flick_cooldown()
-#
-		## Reset stick state
-		#_press_time = 0.0
-		#_is_free_moving = false
-		#_held_timer = 0.0
-#
-		#if current_dir != Vector2.ZERO:
-			#current_dir = Vector2.ZERO
-			#emit_signal("direction_changed", Vector2.ZERO)
-#
-	## TODO Uncomment up to here
-	#
-	### --- FORCE TEST START ---
-	##var test_dir = Vector2.ZERO
-	##if Input.is_key_pressed(KEY_RIGHT): test_dir.x += 1
-	##if Input.is_key_pressed(KEY_LEFT):  test_dir.x -= 1
-	##if Input.is_key_pressed(KEY_DOWN):  test_dir.y += 1
-	##if Input.is_key_pressed(KEY_UP):    test_dir.y -= 1
-	##
-	##if test_dir != Vector2.ZERO:
-		##current_dir = test_dir.normalized()
-		##print("FORCE MOVE: ", current_dir)
-	### --- FORCE TEST END ---
-#
-#
-	## Logic for Mouse/Touch while held (handles the transition from flick to free move)
-	#if is_held:
-		#_press_time += delta
-		#if _press_time > flick_threshold and not _is_free_moving:
-			#_is_free_moving = true
-			#if debug_mode:
-				#print_rich("[color=yellow]MODE: free move (mouse/touch)[/color]")
-		#if _is_free_moving:
-			#_held_timer += delta
-			#if _held_timer >= held_move_interval:
-				#_held_timer = 0.0
-				#if current_dir != Vector2.ZERO:
-					#emit_signal("direction_changed", current_dir)
-					#
-					#
-	#if current_dir != Vector2.ZERO:
-		## Move the knob based on direction and speed
-		#knob.global_position += current_dir * cursor_speed * delta
-#
-		## Keep the cursor inside the game window
-		#var viewport_size = get_viewport_rect().size
-		#knob.global_position.x = clamp(knob.global_position.x, 0, viewport_size.x)
-		#knob.global_position.y = clamp(knob.global_position.y, 0, viewport_size.y)
 
 # ─── Arrow Keys ────────────────────────────────────────────────────────────────
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -343,6 +259,119 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_DOWN:
 			print_rich("[color=gray]Key: DOWN[/color]")
 			emit_signal("action_pressed", "down")
+
+# ─── MSP430 Serial Bridge ─────────────────────────────────────────────────────
+func _serial_connect() -> void:
+	_serial_peer = StreamPeerTCP.new()
+	var err = _serial_peer.connect_to_host(bridge_host, bridge_port)
+	if err != OK and debug_mode:
+		print_rich("[color=red]Serial: Can't connect to bridge on port %d[/color]" % bridge_port)
+
+func _serial_process(delta: float) -> void:
+	if _serial_peer == null:
+		return
+
+	_serial_peer.poll()
+	var status = _serial_peer.get_status()
+
+	match status:
+		StreamPeerTCP.STATUS_CONNECTED:
+			if not _serial_connected:
+				_serial_connected = true
+				_serial_peer.set_no_delay(true)
+				_serial_reconnect_timer = 0.0
+				if debug_mode:
+					print_rich("[color=green]Serial: MSP430 connected via bridge[/color]")
+			_serial_read()
+
+		StreamPeerTCP.STATUS_NONE, StreamPeerTCP.STATUS_ERROR:
+			if _serial_connected:
+				_serial_connected = false
+				if debug_mode:
+					print_rich("[color=red]Serial: Disconnected[/color]")
+			_serial_reconnect_timer += delta
+			if _serial_reconnect_timer >= serial_reconnect_interval:
+				_serial_reconnect_timer = 0.0
+				_serial_connect()
+
+		StreamPeerTCP.STATUS_CONNECTING:
+			pass
+
+func _serial_read() -> void:
+	var available = _serial_peer.get_available_bytes()
+	if available <= 0:
+		return
+
+	var data = _serial_peer.get_data(available)
+	if data[0] != OK:
+		return
+
+	_serial_buffer += data[1].get_string_from_utf8()
+
+	while true:
+		var nl = _serial_buffer.find("\n")
+		if nl == -1:
+			break
+		var line = _serial_buffer.substr(0, nl).strip_edges()
+		_serial_buffer = _serial_buffer.substr(nl + 1)
+		if line.length() > 0:
+			_serial_parse(line)
+
+func _serial_parse(line: String) -> void:
+	# format: J:x,y,b
+	if not line.begins_with("J:"):
+		return
+
+	var parts = line.substr(2).split(",")
+	if parts.size() != 3:
+		return
+
+	var sx: int = int(parts[0])   # 0=neutral, 1=left, 2=right
+	var sy: int = int(parts[1])   # 0=neutral, 1=up, 2=down
+	var btn: bool = (parts[2] == "1")
+
+	# Build direction vector
+	var dir := Vector2.ZERO
+	if sx == 1: dir.x = -1.0    # LEFT
+	elif sx == 2: dir.x = 1.0   # RIGHT
+	if sy == 1: dir.y = -1.0    # UP (screen Y inverted)
+	elif sy == 2: dir.y = 1.0   # DOWN
+
+	# Always emit direction_changed for cursor movement
+	if dir != current_dir:
+		current_dir = dir
+		_last_logged_dir = dir
+		emit_signal("direction_changed", dir)
+
+	# Only emit action_pressed on direction CHANGE (edge detection for combos)
+	if dir != Vector2.ZERO and dir != _serial_prev_dir:
+		var action = _dir_to_action(dir)
+		emit_signal("action_pressed", action)
+	_serial_prev_dir = dir
+
+	# Button edge detection
+	if btn and not _serial_prev_btn:
+		emit_signal("action_pressed", "confirm")
+		if debug_mode:
+			print_rich("[color=magenta]Serial: button pressed[/color]")
+	_serial_prev_btn = btn
+
+## Send a command to the MSP430 (buzzer, LCD)
+func serial_send(cmd: String) -> void:
+	if _serial_connected and _serial_peer != null:
+		_serial_peer.put_data((cmd + "\n").to_utf8_buffer())
+
+## Play a song on the MSP430 buzzer
+func serial_play_song(id: int) -> void:
+	serial_send("SONG:%d" % id)
+
+## Show an LCD preset on the MSP430 screen
+func serial_set_lcd(id: int) -> void:
+	serial_send("LCD:%d" % id)
+
+## Play song and set LCD in one message
+func serial_song_and_lcd(song_id: int, lcd_id: int) -> void:
+	serial_send("SONG:%d LCD:%d" % [song_id, lcd_id])
 
 # ─── Helpers ───────────────────────────────────────────────────────────────────
 # Converts a 2D vector into one of 4 cardinal strings
@@ -399,7 +428,6 @@ func _on_action_pressed(action_name: String) -> void:
 	_restart_reset_timer()
 
 	# 2. Cancel any confirmation timer currently running from a previous input
-	# This is the "Fix": Every new tap kills the previous "pending" fire.
 	_cancel_pending_combo()
 
 	if debug_mode:
@@ -409,12 +437,10 @@ func _on_action_pressed(action_name: String) -> void:
 	var match_name := _find_best_match()
 
 	# Update the pending name ONLY if we found a NEW match.
-	# If current input is a "dud", we keep the previous match saved in _pending_combo.
 	if match_name != "":
 		_pending_combo = match_name
 
 	# 4. If we have ANY saved match (new or old), restart the confirmation timer.
-	# This ensures that as long as you are typing, the combo waits.
 	if _pending_combo != "":
 		if debug_mode:
 			print_rich("[color=cyan]Pending: %s (Timer reset by input)[/color]" % _pending_combo)
@@ -430,28 +456,20 @@ func _on_action_pressed(action_name: String) -> void:
 func _find_best_match() -> String:
 	# Checks longer sequences first (greedily)
 	for combo in _sorted_combos:
-		var len: int = combo.size()
-		if input_sequence.size() >= len:
-			# Slice the tail of the current sequence to compare against the dictionary key
-			var tail: Array = input_sequence.slice(input_sequence.size() - len)
+		var combo_len: int = combo.size()
+		if input_sequence.size() >= combo_len:
+			var tail: Array = input_sequence.slice(input_sequence.size() - combo_len)
 			if tail == combo:
 				return combos[combo]
 	return ""
 
 func _cancel_pending_combo() -> void:
-	# If we have a timer running, we stop acknowledging it
 	if _combo_confirm_timer != null:
-		# We can't "stop" a SceneTreeTimer, but by nulling the reference,
-		# the _confirm_pending_combo function will return early when it eventually fires.
 		_combo_confirm_timer = null
 	
 	if _pending_combo != "" and debug_mode:
 		print_rich("[color=orange]Input detected: Delaying combo '%s'[/color]" % _pending_combo)
-	
-	# We DO NOT clear _pending_combo here, because if the next input doesn't
-	# create a new match, we still want to remember the last valid match we had.
 
-# Fired by the timer to actually execute the combo after the delay
 func _confirm_pending_combo() -> void:
 	if _combo_confirm_timer == null:
 		return
@@ -470,7 +488,6 @@ func _trigger_combo(combo_name: String) -> void:
 	var overlapping_areas = $VisualKnob/CursorDetector.get_overlapping_areas()
 	
 	for area in overlapping_areas:
-		# Check if the object has a function to handle being clicked
 		if area.get_parent().has_method("on_cursor_action"):
 			area.get_parent().on_cursor_action(combo_name)
 	
@@ -485,13 +502,11 @@ func _trigger_combo(combo_name: String) -> void:
 		"example_llr":        print_rich("[color=green]→ LLR combo fired[/color]")
 
 # ─── Debug ─────────────────────────────────────────────────────────────────────
-# Prints direction changes but snaps them to avoid spamming tiny float changes
 func _debug_direction(vec: Vector2) -> void:
 	var rounded = vec.snapped(Vector2(0.1, 0.1))
 	if rounded != _last_logged_dir.snapped(Vector2(0.1, 0.1)):
 		print_rich("[color=yellow]DIR: %s[/color]" % rounded)
 
-# Automates firing signals to test if the combo system detects them
 func _simulate_combo(actions: Array) -> void:
 	print_rich("[color=white]── Simulating combo: %s ──[/color]" % str(actions))
 	for action in actions:
