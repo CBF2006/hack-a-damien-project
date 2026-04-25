@@ -9,6 +9,7 @@ func _ready():
 	pass
 
 func _on_start_button_pressed():
+	GameManager.new_game()
 	get_tree().change_scene_to_file(GAME_SCENE)
 	
 func  _on_quit_button_pressed():
