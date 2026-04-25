@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://qs5cn6wljqu5"]
+
+[ext_resource type="Script" uid="uid://d2pa8x52y48f4" path="res://scripts/joystick_controller.gd" id="1_tr5vo"]
+[ext_resource type="Texture2D" uid="uid://drayn2oio5joh" path="res://icon.svg" id="2_lhjoi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lhjoi"]
+
+[node name="JoystickController" type="Control" unique_id=1835551013]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tr5vo")
+
+[node name="VisualKnob" type="TextureRect" parent="." unique_id=27243819]
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 128.0
+texture = ExtResource("2_lhjoi")
+
+[node name="CursorDetector" type="Area2D" parent="VisualKnob" unique_id=2053810481]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisualKnob/CursorDetector" unique_id=1052356748]
+shape = SubResource("CircleShape2D_lhjoi")
+
+[node name="TouchArea" type="Control" parent="." unique_id=285297167]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
