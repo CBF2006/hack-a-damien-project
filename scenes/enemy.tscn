@@ -61,6 +61,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ra3w"]
+radius = 10.049875
+
 [node name="Enemy" type="Node2D" unique_id=1644159487]
 script = ExtResource("1_4ra3w")
 
@@ -71,3 +74,6 @@ script = ExtResource("1_7p1mj")
 sprite_frames = SubResource("SpriteFrames_8qclf")
 autoplay = "default"
 frame_progress = 0.59572375
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=484248588]
+shape = SubResource("CircleShape2D_4ra3w")
