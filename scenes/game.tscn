@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://ca84qydilabut"]
 
-[ext_resource type="Script" path="res://scenes/game.gd" id="1_iywne"]
+[ext_resource type="Script" uid="uid://c0fw24mf42nia" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
-[ext_resource type="PackedScene" uid="uid://ca17fbc0adwlg" path="res://scenes/enemy.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -1805,7 +1805,7 @@ sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 
 [sub_resource type="Curve2D" id="Curve2D_lnu2h"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 224, 537, 0, 0, 0, 0, 223, 290, 0, 0, 0, 0, 349, 288, 0, 0, 0, 0, 349, 479, 0, 0, 0, 0, 545, 477, 0, 0, 0, 0, 546, 227, 0, 0, 0, 0, 927, 226, 0, 0, 0, 0, 927, 413, 0, 0, 0, 0, 737, 413, 0, 0, 0, 0, 734, 94)
+"points": PackedVector2Array(0, 0, 0, 0, 224, 537, 0, 0, 0, 0, 223, 290, 0, 0, 0, 0, 349, 288, 0, 0, 0, 0, 349, 481, 0, 0, 0, 0, 545, 480, 0, 0, 0, 0, 544, 225, 0, 0, 0, 0, 927, 224, 0, 0, 0, 0, 927, 413, 0, 0, 0, 0, 737, 413, 0, 0, 0, 0, 736, 94)
 }
 point_count = 10
 
