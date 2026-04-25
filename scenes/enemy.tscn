@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://ca17fbc0adwlg"]
+[gd_scene format=3 uid="uid://toxf3fadld6g"]
 
-[ext_resource type="Script" uid="uid://by12bvl181fcy" path="res://character_body_2d.gd" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://codkvrqb5h253" path="res://scenes/enemy.gd" id="1_4ra3w"]
+[ext_resource type="Script" path="res://character_body_2d.gd" id="1_7p1mj"]
 [ext_resource type="Texture2D" uid="uid://d20g65o8msys3" path="res://assets/enemy/Character-and-Zombie.png" id="2_md0e3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ra3w"]
@@ -61,6 +62,7 @@ animations = [{
 }]
 
 [node name="Enemy" type="Node2D" unique_id=1644159487]
+script = ExtResource("1_4ra3w")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=301229819]
 script = ExtResource("1_7p1mj")
