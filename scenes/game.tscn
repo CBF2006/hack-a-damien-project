@@ -1831,6 +1831,7 @@ curve = SubResource("Curve2D_lnu2h")
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=272517739]
 position = Vector2(224, 537)
 rotation = -1.5748448
+loop = false
 script = ExtResource("3_lbhrr")
 
 [node name="Enemy" parent="Path2D/PathFollow2D" unique_id=1644159487 instance=ExtResource("3_lnu2h")]
