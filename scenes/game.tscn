@@ -1813,7 +1813,3 @@ texture = ExtResource("1_yqjtg")
 [node name="TileMap" type="TileMap" parent="." unique_id=1494918748]
 tile_set = SubResource("TileSet_lnu2h")
 format = 2
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=389782376]
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=1258654534]
