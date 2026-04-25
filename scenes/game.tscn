@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ca84qydilabut"]
 
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
+[ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -1804,6 +1805,10 @@ sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=135427909]
 position = Vector2(575, 325)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=686492729]
+position = Vector2(572, 320)
+texture = ExtResource("1_yqjtg")
 
 [node name="TileMap" type="TileMap" parent="." unique_id=1494918748]
 tile_set = SubResource("TileSet_lnu2h")
