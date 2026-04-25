@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://c7vstn0wkedos"]
+
+[ext_resource type="Script" uid="uid://dv4qp4826k77m" path="res://scripts/tower.gd" id="1_k1sas"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dnc73"]
+load_path = "res://.godot/imported/Towers.png-47244f8fe872de700fc420455a848ad1.ctex"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2x682"]
+size = Vector2(27, 33)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dnc73"]
+radius = 98.02041
+
+[node name="tower" type="Node2D" unique_id=1611531955]
+script = ExtResource("1_k1sas")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=31909089]
+position = Vector2(0, -7)
+texture = SubResource("CompressedTexture2D_dnc73")
+hframes = 3
+region_rect = Rect2(0, 0, 144, 64)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=70082736]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("RectangleShape2D_2x682")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=50311130]
+
+[node name="DetectionRange" type="CollisionShape2D" parent="Area2D" unique_id=1564089441]
+shape = SubResource("CircleShape2D_dnc73")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

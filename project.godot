@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Hack-a-Damien Project"
-run/main_scene="uid://ca84qydilabut"
+run/main_scene="uid://dxpeg2a86x4wi"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameManager="*res://scripts/game_manager.gd"
 
 [dotnet]
 
@@ -60,4 +64,5 @@ ui_down={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
