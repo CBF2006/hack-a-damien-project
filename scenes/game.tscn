@@ -1806,7 +1806,7 @@ sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=135427909]
 position = Vector2(575, 325)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=686492729]
+[node name="Background" type="Sprite2D" parent="." unique_id=686492729]
 position = Vector2(572, 320)
 texture = ExtResource("1_yqjtg")
 
