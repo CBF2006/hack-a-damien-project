@@ -7,4 +7,5 @@ func _process(delta):
 	follow.progress += speed * delta
 	
 	if follow.progress_ratio >= 1.0:
+		get_tree().get_root().get_node("game").enemies_died()
 		follow.queue_free()
