@@ -3,7 +3,7 @@ extends Node2D
 @export var enemy_scene : PackedScene
 var wave = 1
 var enemies_to_spawn = 5
-var spawn_delay = 1.5
+var spawn_delay = 2
 
 func _ready():
 	start_wave()
