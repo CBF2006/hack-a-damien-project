@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://ca84qydilabut"]
 
+[ext_resource type="Script" uid="uid://c0fw24mf42nia" path="res://scenes/game.gd" id="1_iywne"]
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
-[ext_resource type="Script" uid="uid://eh75hbi1cd0v" path="res://scenes/path_follow_2d.gd" id="3_lbhrr"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -1810,6 +1810,8 @@ _data = {
 point_count = 10
 
 [node name="game" type="Node2D" unique_id=1845552477]
+script = ExtResource("1_iywne")
+enemy_scene = ExtResource("3_lnu2h")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=135427909]
 position = Vector2(575, 325)
@@ -1832,6 +1834,5 @@ curve = SubResource("Curve2D_lnu2h")
 position = Vector2(224, 537)
 rotation = -1.5748448
 loop = false
-script = ExtResource("3_lbhrr")
 
 [node name="Enemy" parent="Path2D/PathFollow2D" unique_id=1644159487 instance=ExtResource("3_lnu2h")]
