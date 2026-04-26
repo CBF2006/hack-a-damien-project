@@ -4,7 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
+<<<<<<< Updated upstream
 [ext_resource type="PackedScene" path="res://scenes/tower.tscn" id="5_iywne"]
+=======
+[ext_resource type="Script" uid="uid://comgtbshgeyl6" path="res://scripts/build_spot.gd" id="6_buildspot"]
+[ext_resource type="Texture2D" uid="uid://ej8vfennu7c8" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0000.png" id="6_p57ef"]
+[ext_resource type="Texture2D" uid="uid://ehvu7m4bfkx6" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0001.png" id="7_0tnpc"]
+[ext_resource type="Texture2D" uid="uid://c61lkfn4mji5p" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0002.png" id="8_vtaks"]
+[ext_resource type="Texture2D" uid="uid://bw00f8rfqp3d0" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0003.png" id="9_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://qs5cn6wljqu5" path="res://scenes/ui/joystick_controller.tscn" id="10_joy"]
+>>>>>>> Stashed changes
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -1836,5 +1845,96 @@ position = Vector2(224, 537)
 rotation = -1.5748448
 loop = false
 
+<<<<<<< Updated upstream
 [node name="tower" parent="." unique_id=1611531955 instance=ExtResource("5_iywne")]
 position = Vector2(608, 295)
+=======
+[node name="Enemy" parent="Path2D/PathFollow2D" unique_id=1644159487 instance=ExtResource("3_lnu2h")]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=322594139]
+position = Vector2(289, 360)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D" unique_id=474630639]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/ActionArea" unique_id=1520897362]
+shape = SubResource("RectangleShape2D_buildspot")
+
+[node name="Node2D2" type="Node2D" parent="." unique_id=550790662]
+position = Vector2(478, 430)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D2" unique_id=1814434066]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/ActionArea" unique_id=2123545656]
+shape = SubResource("RectangleShape2D_buildspot")
+
+[node name="Node2D3" type="Node2D" parent="." unique_id=423516895]
+position = Vector2(605, 299)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D3" unique_id=1482665507]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D3/ActionArea" unique_id=171481177]
+shape = SubResource("RectangleShape2D_buildspot")
+
+[node name="Node2D4" type="Node2D" parent="." unique_id=1405275303]
+position = Vector2(802, 172)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D4" unique_id=229366023]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D4/ActionArea" unique_id=1471501174]
+shape = SubResource("RectangleShape2D_buildspot")
+
+[node name="Node2D5" type="Node2D" parent="." unique_id=1216781576]
+position = Vector2(867, 363)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D5" unique_id=1726365662]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D5/ActionArea" unique_id=1111955047]
+shape = SubResource("RectangleShape2D_buildspot")
+
+[node name="Cursor" type="AnimatedSprite2D" parent="." unique_id=573194015]
+position = Vector2(-33, 33)
+sprite_frames = SubResource("SpriteFrames_dinhu")
+animation = &"choose"
+
+[node name="ShopMenu" type="CanvasLayer" parent="." unique_id=964319214]
+
+[node name="Panel" type="Panel" parent="ShopMenu" unique_id=431625999]
+offset_left = 559.0
+offset_top = 306.0
+offset_right = 659.0
+offset_bottom = 406.0
+
+[node name="ItemLabel" type="Label" parent="ShopMenu/Panel" unique_id=507613412]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="messageLabel" type="Label" parent="ShopMenu/Panel" unique_id=736040298]
+layout_mode = 0
+offset_top = 10.0
+offset_right = 40.0
+offset_bottom = 33.0
+
+[node name="message_timer" type="Timer" parent="ShopMenu/Panel" unique_id=1635505190]
+
+[node name="JoystickController" parent="." unique_id=1158735553 instance=ExtResource("10_joy")]
+offset_left = 566.0
+offset_top = 290.0
+offset_right = 566.0
+offset_bottom = 290.0
+>>>>>>> Stashed changes
