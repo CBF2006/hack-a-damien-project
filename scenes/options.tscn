@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://boptionstscn1"]
+
+[ext_resource type="Script" uid="uid://boptionsgd001" path="res://scripts/options.gd" id="1_opts"]
+[ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="2_bg"]
+
+[node name="Options" type="Control" unique_id=1100001001]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_opts")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1100001002]
+layout_mode = 1
+offset_right = 1080.0
+offset_bottom = 920.0
+texture = ExtResource("2_bg")
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1100001003]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 540.0
+offset_bottom = 915.0
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1100001004]
+layout_mode = 2
+text = "OPTIONS"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 52
+
+[node name="ResLabel" type="Label" parent="VBoxContainer" unique_id=1100001005]
+layout_mode = 2
+text = "Resolution:"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 26
+
+[node name="Res1080x920" type="Button" parent="VBoxContainer" unique_id=1100001006]
+layout_mode = 2
+text = "1080 × 920  (default)"
+
+[node name="Res1280x720" type="Button" parent="VBoxContainer" unique_id=1100001007]
+layout_mode = 2
+text = "1280 × 720"
+
+[node name="Res1600x900" type="Button" parent="VBoxContainer" unique_id=1100001008]
+layout_mode = 2
+text = "1600 × 900"
+
+[node name="Res1920x1080" type="Button" parent="VBoxContainer" unique_id=1100001009]
+layout_mode = 2
+text = "1920 × 1080"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1100001010]
+layout_mode = 2
+
+[node name="FullscreenButton" type="CheckButton" parent="VBoxContainer" unique_id=1100001011]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=1100001012]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1100001013]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="VBoxContainer/Res1080x920" to="." method="_on_res_1080x920_pressed"]
+[connection signal="pressed" from="VBoxContainer/Res1280x720" to="." method="_on_res_1280x720_pressed"]
+[connection signal="pressed" from="VBoxContainer/Res1600x900" to="." method="_on_res_1600x900_pressed"]
+[connection signal="pressed" from="VBoxContainer/Res1920x1080" to="." method="_on_res_1920x1080_pressed"]
+[connection signal="toggled" from="VBoxContainer/FullscreenButton" to="." method="_on_fullscreen_toggled"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_pressed"]
