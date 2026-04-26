@@ -40,7 +40,7 @@ func start_wave(initial_delay: float = 0.0) -> void:
 	if not game_active:
 		return
 	hud_instance.set_wave(wave)
-	show_tutorial_hint("Use combos directly or open shop with Right-Left-Right-Left.")
+	show_tutorial_hint("Move to a tower and then press down on the joystick to interact with it")
 	enemies_alive = enemies_to_spawn
 
 	if initial_delay > 0.0:
