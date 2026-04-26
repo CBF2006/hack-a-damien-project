@@ -55,7 +55,13 @@ func _upgrade_tower() -> void:
 		_show_feedback("No tower here")
 		return
 
-	if not _try_spend(upgrade_cost):
+	var cost := upgrade_cost
+	if tower_instance.has_method("get_upgrade_cost"):
+		var next_cost: int = int(tower_instance.get_upgrade_cost())
+		if next_cost > 0:
+			cost = next_cost
+
+	if not _try_spend(cost):
 		_show_feedback("Not enough money")
 		return
 
@@ -64,7 +70,7 @@ func _upgrade_tower() -> void:
 		_show_feedback("Tower upgraded")
 	else:
 		_show_feedback("Tower is already maxed")
-		_refund(upgrade_cost)
+		_refund(cost)
 
 
 func _sell_tower() -> void:

@@ -99,7 +99,7 @@ func enemy_killed():
 	money += 10 
 	updateMoney()
 
-func try_buy(cost, item_name):
+func try_buy(cost, _item_name):
 	if money >= cost:
 		money -= cost
 		updateMoney()

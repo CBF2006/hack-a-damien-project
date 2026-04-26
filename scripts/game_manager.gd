@@ -1,14 +1,19 @@
 extends Node
 
 signal health_changed(current: int, maximum: int)
+signal money_changed(current: int)
 signal game_over_triggered
 signal victory_triggered
 
 const HP_LOSS_PER_ENEMY: int = 2
 const VICTORY_WAVE: int = 10
+const STARTING_MONEY_EASY: int = 220
+const STARTING_MONEY_NORMAL: int = 160
+const STARTING_MONEY_HARD: int = 120
 
 var player_health: int = 20
 var max_health: int = 20
+var player_money: int = STARTING_MONEY_NORMAL
 var difficulty: int = 1
 var _ended: bool = false
 
@@ -16,11 +21,18 @@ func setup(diff: int) -> void:
 	difficulty = diff
 	_ended = false
 	match difficulty:
-		0: max_health = 30
-		1: max_health = 20
-		2: max_health = 10
+		0:
+			max_health = 30
+			player_money = STARTING_MONEY_EASY
+		1:
+			max_health = 20
+			player_money = STARTING_MONEY_NORMAL
+		2:
+			max_health = 10
+			player_money = STARTING_MONEY_HARD
 	player_health = max_health
 	health_changed.emit(player_health, max_health)
+	money_changed.emit(player_money)
 
 func enemy_reached_end() -> void:
 	if _ended:
@@ -42,6 +54,41 @@ func reset() -> void:
 	_ended = false
 	player_health = max_health
 	health_changed.emit(player_health, max_health)
+	money_changed.emit(player_money)
+
+
+func can_spend_money(amount: int) -> bool:
+	if amount <= 0:
+		return true
+	return player_money >= amount
+
+
+func spend_money(amount: int) -> bool:
+	if amount <= 0:
+		return true
+	if not can_spend_money(amount):
+		return false
+	player_money -= amount
+	money_changed.emit(player_money)
+	return true
+
+
+func try_spend_money(amount: int) -> bool:
+	return spend_money(amount)
+
+
+func refund_money(amount: int) -> void:
+	if amount <= 0:
+		return
+	player_money += amount
+	money_changed.emit(player_money)
+
+
+func add_money(amount: int) -> void:
+	if amount <= 0:
+		return
+	player_money += amount
+	money_changed.emit(player_money)
 
 
 #new joystick stuff

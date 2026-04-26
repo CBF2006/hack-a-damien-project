@@ -5,6 +5,7 @@ extends Control
 signal direction_changed(vector: Vector2)
 # Emitted for discrete inputs like quick flicks or key presses
 signal action_pressed(action_name: String)
+signal combo_triggered(combo_name: String)
 # Emitted whenever the player enters or exits Action Mode
 signal action_mode_toggled(enabled: bool)
 
@@ -16,6 +17,7 @@ signal action_mode_toggled(enabled: bool)
 @export var joy_con_device_index   := 0      # The specific controller index to listen to
 @export var combo_max_length       := 10     # Max number of inputs stored in the history buffer
 @export var simulate_combo_delay   := 1.0   # Seconds to wait before running the startup debug test
+@export var run_startup_combo_test := false # Optional debug test; disabled by default
 @export var gesture_joycon_scale   := 2.0   # Sensitivity multiplier for joystick gestures
 @export var input_gap              := 0.15  # Time between inputs during simulation
 @export var flick_threshold        := 0.2   # Time window (s): release under this counts as a flick
@@ -25,6 +27,7 @@ signal action_mode_toggled(enabled: bool)
 @export var combo_confirm_delay    := 0.35  # Wait after a partial match before confirming it
 @export var combo_reset_timeout    := 1.2   # Idle time before the input sequence resets
 @export var snap_dir_threshold     := 0.1   # Snapping precision for direction-change debug logs
+@export var repeated_input_cooldown := 0.08 # Filters accidental duplicate combo inputs
 
 # ─── Serial Bridge Config ──────────────────────────────────────────────────────
 @export var bridge_host                := "127.0.0.1"
@@ -72,6 +75,9 @@ var _serial_reconnect_timer  := 0.0
 var _serial_prev_btn         := false
 var _serial_prev_dir         := Vector2.ZERO
 var _serial_dir              := Vector2.ZERO
+var _elapsed                 := 0.0
+var _last_action_name        := ""
+var _last_action_time        := -1.0
 
 # ─── Combos ────────────────────────────────────────────────────────────────────
 var combos := {
@@ -108,8 +114,9 @@ func _ready() -> void:
 		action_pressed.connect(_on_action_pressed)
 		action_mode_toggled.connect(_debug_action_mode)
 
-		await get_tree().create_timer(simulate_combo_delay).timeout
-		_simulate_combo(["up", "up"])
+		if run_startup_combo_test:
+			await get_tree().create_timer(simulate_combo_delay).timeout
+			_simulate_combo(["up", "up"])
 
 	_serial_connect()
 
@@ -199,6 +206,7 @@ func _handle_release_flick(source: String) -> void:
 
 # ─── Process (Joy-Con + Cursor Movement) ────────────────────────────────────────
 func _process(delta: float) -> void:
+	_elapsed += delta
 	_serial_process(delta)
 
 	var stick := Vector2(
@@ -434,6 +442,9 @@ func _restart_reset_timer() -> void:
 
 # ─── Combo Detection ────────────────────────────────────────────────────────────
 func _on_action_pressed(action_name: String) -> void:
+	if _should_skip_repeated_input(action_name):
+		return
+
 	# Combo tracking only runs in Action Mode.
 	if not _action_mode:
 		return
@@ -457,6 +468,21 @@ func _on_action_pressed(action_name: String) -> void:
 
 	if input_sequence.size() > combo_max_length:
 		input_sequence.pop_front()
+
+
+func _should_skip_repeated_input(action_name: String) -> bool:
+	if action_name != _last_action_name:
+		_last_action_name = action_name
+		_last_action_time = _elapsed
+		return false
+
+	if _last_action_time < 0.0:
+		_last_action_time = _elapsed
+		return false
+
+	var delta_time := _elapsed - _last_action_time
+	_last_action_time = _elapsed
+	return delta_time < repeated_input_cooldown
 
 func _find_best_match() -> String:
 	for combo in _sorted_combos:
@@ -484,6 +510,8 @@ func _confirm_pending_combo() -> void:
 	_reset_sequence("combo fired")
 
 func _trigger_combo(combo_name: String) -> void:
+	emit_signal("combo_triggered", combo_name)
+
 	var overlapping_areas = $VisualKnob/CursorDetector.get_overlapping_areas()
 	for area in overlapping_areas:
 		if area.get_parent().has_method("on_cursor_action"):
@@ -498,6 +526,14 @@ func _trigger_combo(combo_name: String) -> void:
 		"place_tower":      print_rich("[color=green]→ place verb[/color]")
 		"example_llrr":     print_rich("[color=green]→ LLRR combo fired[/color]")
 		"example_llr":      print_rich("[color=green]→ LLR combo fired[/color]")
+
+
+func get_hovered_build_spot() -> Node:
+	for area in $VisualKnob/CursorDetector.get_overlapping_areas():
+		var parent_node: Node = area.get_parent()
+		if parent_node != null and parent_node.has_method("on_cursor_action"):
+			return parent_node
+	return null
 
 # ─── Debug ─────────────────────────────────────────────────────────────────────
 func _debug_direction(vec: Vector2) -> void:
