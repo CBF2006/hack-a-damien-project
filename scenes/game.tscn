@@ -1,10 +1,15 @@
 [gd_scene format=3 uid="uid://ca84qydilabut"]
 
-[ext_resource type="Script" uid="uid://c0fw24mf42nia" path="res://scripts/game.gd" id="1_iywne"]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
+<<<<<<< HEAD
+[ext_resource type="PackedScene" uid="uid://ca17fbc0adwlg" path="res://scenes/enemy.tscn" id="3_lnu2h"]
+[ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scenes/select.gd" id="5_iywne"]
+=======
 [ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scripts/select.gd" id="5_iywne"]
+>>>>>>> main
 [ext_resource type="Texture2D" uid="uid://ej8vfennu7c8" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0000.png" id="6_p57ef"]
 [ext_resource type="Texture2D" uid="uid://ehvu7m4bfkx6" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0001.png" id="7_0tnpc"]
 [ext_resource type="Texture2D" uid="uid://c61lkfn4mji5p" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0002.png" id="8_vtaks"]
@@ -1884,3 +1889,21 @@ position = Vector2(867, 363)
 position = Vector2(-33, 33)
 sprite_frames = SubResource("SpriteFrames_dinhu")
 animation = &"choose"
+
+[node name="ShopMenu" type="CanvasLayer" parent="." unique_id=964319214]
+
+[node name="Panel" type="Panel" parent="ShopMenu" unique_id=431625999]
+offset_left = 559.0
+offset_top = 306.0
+offset_right = 599.0
+offset_bottom = 346.0
+
+[node name="ItemLabel" type="Label" parent="ShopMenu/Panel" unique_id=507613412]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ArrowsLabel" type="Label" parent="ShopMenu/Panel" unique_id=1166451337]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
