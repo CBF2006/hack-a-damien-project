@@ -50,6 +50,7 @@ theme_override_font_sizes/font_size = 30
 text = "Quit to Desktop"
 
 [node name="JoystickController" parent="." unique_id=1835551013 instance=ExtResource("3_48ign")]
+visible = false
 layout_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_start_button_pressed"]
