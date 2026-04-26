@@ -26,6 +26,7 @@ func take_damage(amount: int) -> void:
 		_die()
 
 func _die() -> void:
+	GameManager.play_song(GameManager.SONG_KILL)
 	var game = get_tree().get_root().get_node_or_null("game")
 	if game:
 		game.enemies_died()

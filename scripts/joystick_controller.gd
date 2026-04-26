@@ -71,6 +71,7 @@ var _serial_buffer           := ""
 var _serial_reconnect_timer  := 0.0
 var _serial_prev_btn         := false
 var _serial_prev_dir         := Vector2.ZERO
+var _serial_dir              := Vector2.ZERO
 
 # ─── Combos ────────────────────────────────────────────────────────────────────
 var combos := {
@@ -87,6 +88,7 @@ var _sorted_combos: Array = []
 
 # ─── Ready ─────────────────────────────────────────────────────────────────────
 func _ready() -> void:
+	add_to_group("joystick_controller")          # NEW
 	_sorted_combos = combos.keys()
 	_sorted_combos.sort_custom(func(a, b): return a.size() > b.size())
 
@@ -203,6 +205,8 @@ func _process(delta: float) -> void:
 		Input.get_axis("ui_left", "ui_right"),
 		Input.get_axis("ui_up", "ui_down")
 	)
+	if stick.length() < joy_con_dead_zone:
+		stick = _serial_dir
 
 	if stick.length() > joy_con_dead_zone:
 		current_dir      = stick.normalized()
@@ -361,8 +365,8 @@ func _serial_parse(line: String) -> void:
 	if   sy == 1: dir.y = -1.0
 	elif sy == 2: dir.y =  1.0
 
-	if dir != current_dir:
-		current_dir      = dir
+	_serial_dir = dir
+	if dir != _serial_prev_dir:
 		_last_logged_dir = dir
 		emit_signal("direction_changed", dir)
 

@@ -42,3 +42,33 @@ func reset() -> void:
 	_ended = false
 	player_health = max_health
 	health_changed.emit(player_health, max_health)
+
+
+#new joystick stuff
+# ─── Song IDs (must match buzzer.h on the MSP430) ─────────────────────────────
+const SONG_NONE       := 0
+const SONG_MAIN       := 1
+const SONG_PLACE      := 2
+const SONG_UPGRADE    := 3
+const SONG_SELL       := 4
+const SONG_WAVE_START := 5
+const SONG_GAMEOVER   := 6
+const SONG_KILL       := 7
+
+# ─── MSP430 buzzer / LCD passthrough ──────────────────────────────────────────
+# These look up the JoystickController (which holds the open TCP connection
+# to the Python serial bridge) and forward the call. If the controller isn't
+# in the scene yet (e.g. on the main menu), the call is a silent no-op.
+
+func play_song(id: int) -> void:
+	var jc := get_tree().get_first_node_in_group("joystick_controller")
+	if jc != null:
+		jc.serial_play_song(id)
+
+func stop_song() -> void:
+	play_song(SONG_NONE)
+
+func set_lcd(id: int) -> void:
+	var jc := get_tree().get_first_node_in_group("joystick_controller")
+	if jc != null:
+		jc.serial_set_lcd(id)

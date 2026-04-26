@@ -21,8 +21,10 @@ func _ready() -> void:
 	show_tutorial_hint("Hover a spot. Up-Up builds. Up-Down upgrades. Down-Down-Down sells.")
 
 	start_wave()
+	GameManager.play_song(GameManager.SONG_MAIN)
 
 func start_wave() -> void:
+	GameManager.play_song(GameManager.SONG_WAVE_START)
 	if not game_active:
 		return
 	hud_instance.set_wave(wave)
@@ -57,10 +59,12 @@ func enemies_died() -> void:
 			start_wave()
 
 func _on_game_over() -> void:
+	GameManager.play_song(GameManager.SONG_GAMEOVER)
 	game_active = false
 	get_tree().change_scene_to_file("res://scenes/game_over.tscn")
 
 func _on_victory() -> void:
+	GameManager.stop_song()
 	game_active = false
 	get_tree().change_scene_to_file("res://scenes/victory.tscn")
 

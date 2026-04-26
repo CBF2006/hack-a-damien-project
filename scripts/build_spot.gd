@@ -46,6 +46,7 @@ func _place_tower() -> void:
 		var spawn_tween := create_tween()
 		spawn_tween.tween_property(tower_root, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
+	GameManager.play_song(GameManager.SONG_PLACE)
 	_show_feedback("Tower placed")
 
 
@@ -59,6 +60,7 @@ func _upgrade_tower() -> void:
 		return
 
 	if tower_instance.has_method("upgrade_tower") and tower_instance.upgrade_tower():
+		GameManager.play_song(GameManager.SONG_UPGRADE)
 		_show_feedback("Tower upgraded")
 	else:
 		_show_feedback("Tower is already maxed")
@@ -91,6 +93,7 @@ func _sell_tower() -> void:
 			tower_instance.queue_free()
 		tower_instance = null
 
+	GameManager.play_song(GameManager.SONG_SELL)
 	_show_feedback("Tower sold")
 
 
