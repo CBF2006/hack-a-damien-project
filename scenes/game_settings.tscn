@@ -65,6 +65,7 @@ layout_mode = 2
 text = "Back"
 
 [node name="JoystickController" parent="." unique_id=1835551013 instance=ExtResource("3_sdswu")]
+visible = false
 layout_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/EasyButton" to="." method="_on_easy_pressed"]
