@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dkoqa2y8hjx23" path="res://scripts/main_menu.gd" id="1_qkhwq"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="2_3d1i7"]
-[ext_resource type="PackedScene" uid="uid://qs5cn6wljqu5" path="res://scenes/ui/joystick_controller.tscn" id="3_48ign"]
 
 [node name="MainMenu" type="Control" unique_id=1202994679]
 layout_mode = 3
@@ -48,10 +47,6 @@ text = "Settings"
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Quit to Desktop"
-
-[node name="JoystickController" parent="." unique_id=1835551013 instance=ExtResource("3_48ign")]
-visible = false
-layout_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_settings_button_pressed"]
