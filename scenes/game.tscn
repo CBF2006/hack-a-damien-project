@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ca84qydilabut"]
 
+[ext_resource type="Script" uid="uid://c0fw24mf42nia" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
 [ext_resource type="Script" uid="uid://eh75hbi1cd0v" path="res://scenes/path_follow_2d.gd" id="3_lbhrr"]
@@ -1810,7 +1811,7 @@ sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 
 [sub_resource type="Curve2D" id="Curve2D_lnu2h"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 224, 537, 0, 0, 0, 0, 223, 290, 0, 0, 0, 0, 349, 288, 0, 0, 0, 0, 349, 479, 0, 0, 0, 0, 545, 477, 0, 0, 0, 0, 546, 227, 0, 0, 0, 0, 927, 226, 0, 0, 0, 0, 927, 413, 0, 0, 0, 0, 737, 413, 0, 0, 0, 0, 734, 94)
+"points": PackedVector2Array(0, 0, 0, 0, 224, 537, 0, 0, 0, 0, 223, 290, 0, 0, 0, 0, 349, 288, 0, 0, 0, 0, 349, 481, 0, 0, 0, 0, 545, 480, 0, 0, 0, 0, 544, 225, 0, 0, 0, 0, 927, 224, 0, 0, 0, 0, 927, 413, 0, 0, 0, 0, 737, 413, 0, 0, 0, 0, 736, 94)
 }
 point_count = 10
 
@@ -1835,6 +1836,8 @@ animations = [{
 }]
 
 [node name="game" type="Node2D" unique_id=1845552477]
+script = ExtResource("1_iywne")
+enemy_scene = ExtResource("3_lnu2h")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=135427909]
 position = Vector2(575, 325)
@@ -1856,7 +1859,7 @@ curve = SubResource("Curve2D_lnu2h")
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=272517739]
 position = Vector2(224, 537)
 rotation = -1.5748448
-script = ExtResource("3_lbhrr")
+loop = false
 
 [node name="Enemy" parent="Path2D/PathFollow2D" unique_id=1644159487 instance=ExtResource("3_lnu2h")]
 
