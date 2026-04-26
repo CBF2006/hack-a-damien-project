@@ -10,6 +10,7 @@ var enemies_to_spawn: int = 5
 var spawn_delay: float = 2.0
 var enemies_alive: int = 0
 var time_between_waves: float = 5.0
+var first_wave_delay: float = 10.0
 var game_active: bool = true
 
 var shop_open: bool = false
@@ -32,31 +33,36 @@ func _ready() -> void:
 	GameManager.victory_triggered.connect(_on_victory)
 	show_tutorial_hint("Hover a spot. Up-Up builds, Up-Down upgrades, Down-Down-Down sells. R-L-R-L opens shop.")
 	
-	start_wave()
 	GameManager.play_song(GameManager.SONG_MAIN)
+	start_wave(first_wave_delay)
 
-func start_wave() -> void:
-	GameManager.play_song(GameManager.SONG_WAVE_START)
+func start_wave(initial_delay: float = 0.0) -> void:
 	if not game_active:
 		return
 	hud_instance.set_wave(wave)
 	show_tutorial_hint("Use combos directly or open shop with Right-Left-Right-Left.")
 	enemies_alive = enemies_to_spawn
 
+	if initial_delay > 0.0:
+		await get_tree().create_timer(initial_delay).timeout
+
+	GameManager.play_song(GameManager.SONG_WAVE_START)
 
 	for i in range(enemies_to_spawn):
 		if not game_active:
 			return
-		spawn_enemy()
 		await get_tree().create_timer(spawn_delay).timeout
+		var enemy = spawn_enemy()
+		enemy.activate()
 
-func spawn_enemy() -> void:
+func spawn_enemy() -> Node:
 	var follow := PathFollow2D.new()
 	follow.loop = false
 	$Path2D.add_child(follow)
 
 	var enemy := enemy_scene.instantiate()
 	follow.add_child(enemy)
+	return enemy
 
 func enemies_died() -> void:
 	if not game_active:

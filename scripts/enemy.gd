@@ -7,6 +7,10 @@ var current_hp: int
 
 func _ready() -> void:
 	current_hp = max_hp
+	set_process(false)
+	
+func activate() -> void:
+	set_process(true)
 
 func _process(delta):
 	var follow = get_parent()
