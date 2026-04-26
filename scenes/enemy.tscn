@@ -66,7 +66,7 @@ radius = 10.049875
 
 [node name="Enemy" type="Node2D" unique_id=1644159487]
 script = ExtResource("1_4ra3w")
-speed = 25.0
+speed = 35.0
 max_hp = 5
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=301229819]
