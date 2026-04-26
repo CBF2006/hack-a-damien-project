@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://ca84qydilabut"]
 
-[ext_resource type="Script" path="res://scripts/game.gd" id="1_iywne"]
+[ext_resource type="Script" uid="uid://c0fw24mf42nia" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
-[ext_resource type="PackedScene" uid="uid://ca17fbc0adwlg" path="res://scenes/enemy.tscn" id="3_lnu2h"]
-[ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scenes/select.gd" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scripts/select.gd" id="5_iywne"]
 [ext_resource type="Script" path="res://scripts/build_spot.gd" id="6_buildspot"]
@@ -1809,9 +1807,6 @@ texture = ExtResource("1_uwrxv")
 38:59/0 = 0
 37:59/0 = 0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_buildspot"]
-size = Vector2(56, 56)
-
 [sub_resource type="TileSet" id="TileSet_lnu2h"]
 sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 
@@ -1820,6 +1815,9 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 224, 537, 0, 0, 0, 0, 223, 290, 0, 0, 0, 0, 349, 288, 0, 0, 0, 0, 349, 481, 0, 0, 0, 0, 545, 480, 0, 0, 0, 0, 544, 225, 0, 0, 0, 0, 927, 224, 0, 0, 0, 0, 927, 413, 0, 0, 0, 0, 737, 413, 0, 0, 0, 0, 736, 94)
 }
 point_count = 10
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_buildspot"]
+size = Vector2(56, 56)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dinhu"]
 animations = [{
@@ -1876,55 +1874,55 @@ script = ExtResource("5_iywne")
 position = Vector2(289, 360)
 script = ExtResource("6_buildspot")
 
-[node name="ActionArea" type="Area2D" parent="Node2D"]
+[node name="ActionArea" type="Area2D" parent="Node2D" unique_id=474630639]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/ActionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/ActionArea" unique_id=1520897362]
 shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D2" type="Node2D" parent="." unique_id=550790662]
 position = Vector2(478, 430)
 script = ExtResource("6_buildspot")
 
-[node name="ActionArea" type="Area2D" parent="Node2D2"]
+[node name="ActionArea" type="Area2D" parent="Node2D2" unique_id=1814434066]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/ActionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/ActionArea" unique_id=2123545656]
 shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D3" type="Node2D" parent="." unique_id=423516895]
 position = Vector2(605, 299)
 script = ExtResource("6_buildspot")
 
-[node name="ActionArea" type="Area2D" parent="Node2D3"]
+[node name="ActionArea" type="Area2D" parent="Node2D3" unique_id=1482665507]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D3/ActionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D3/ActionArea" unique_id=171481177]
 shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D4" type="Node2D" parent="." unique_id=1405275303]
 position = Vector2(802, 172)
 script = ExtResource("6_buildspot")
 
-[node name="ActionArea" type="Area2D" parent="Node2D4"]
+[node name="ActionArea" type="Area2D" parent="Node2D4" unique_id=229366023]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D4/ActionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D4/ActionArea" unique_id=1471501174]
 shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D5" type="Node2D" parent="." unique_id=1216781576]
 position = Vector2(867, 363)
 script = ExtResource("6_buildspot")
 
-[node name="ActionArea" type="Area2D" parent="Node2D5"]
+[node name="ActionArea" type="Area2D" parent="Node2D5" unique_id=1726365662]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D5/ActionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D5/ActionArea" unique_id=1111955047]
 shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Cursor" type="AnimatedSprite2D" parent="." unique_id=573194015]
@@ -1937,17 +1935,20 @@ animation = &"choose"
 [node name="Panel" type="Panel" parent="ShopMenu" unique_id=431625999]
 offset_left = 559.0
 offset_top = 306.0
-offset_right = 599.0
-offset_bottom = 346.0
+offset_right = 659.0
+offset_bottom = 406.0
 
 [node name="ItemLabel" type="Label" parent="ShopMenu/Panel" unique_id=507613412]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="ArrowsLabel" type="Label" parent="ShopMenu/Panel" unique_id=1166451337]
+[node name="messageLabel" type="Label" parent="ShopMenu/Panel" unique_id=736040298]
 layout_mode = 0
+offset_top = 10.0
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 33.0
 
-[node name="JoystickController" parent="." instance=ExtResource("10_joy")]
+[node name="message_timer" type="Timer" parent="ShopMenu/Panel" unique_id=1635505190]
+
+[node name="JoystickController" parent="." unique_id=1158735553 instance=ExtResource("10_joy")]
