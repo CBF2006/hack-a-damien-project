@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://qs5cn6wljqu5"]
 
 [ext_resource type="Script" uid="uid://d2pa8x52y48f4" path="res://scripts/joystick_controller.gd" id="1_tr5vo"]
-[ext_resource type="Texture2D" uid="uid://drayn2oio5joh" path="res://icon.svg" id="2_lhjoi"]
+[ext_resource type="Texture2D" uid="uid://c0i3grmab0eq8" path="res://assets/cursor/precision3.png" id="2_lhjoi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lhjoi"]
 
@@ -16,8 +16,8 @@ script = ExtResource("1_tr5vo")
 
 [node name="VisualKnob" type="TextureRect" parent="." unique_id=27243819]
 layout_mode = 0
-offset_right = 128.0
-offset_bottom = 128.0
+offset_right = 32.0
+offset_bottom = 32.0
 texture = ExtResource("2_lhjoi")
 
 [node name="CursorDetector" type="Area2D" parent="VisualKnob" unique_id=2053810481]
