@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://cgdoqvsjlhfcp"]
+[gd_scene format=3 uid="uid://c61o5m5vtul7i"]
 
 [ext_resource type="Script" uid="uid://crmx5j7ka3p2n" path="res://scripts/game_settings.gd" id="1_settings"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="2_bg"]
+[ext_resource type="PackedScene" uid="uid://qs5cn6wljqu5" path="res://scenes/ui/joystick_controller.tscn" id="3_sdswu"]
 
 [node name="GameSettings" type="Control" unique_id=1006939584]
 layout_mode = 3
@@ -30,15 +31,15 @@ theme_override_constants/separation = 18
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=289224172]
 layout_mode = 2
+theme_override_font_sizes/font_size = 52
 text = "GAME SETTINGS"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 52
 
 [node name="DifficultyLabel" type="Label" parent="VBoxContainer" unique_id=338052780]
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "Select Difficulty:"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 26
 
 [node name="EasyButton" type="Button" parent="VBoxContainer" unique_id=1848568331]
 layout_mode = 2
@@ -62,6 +63,9 @@ text = "START GAME"
 [node name="BackButton" type="Button" parent="VBoxContainer" unique_id=723318483]
 layout_mode = 2
 text = "Back"
+
+[node name="JoystickController" parent="." unique_id=1835551013 instance=ExtResource("3_sdswu")]
+layout_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/EasyButton" to="." method="_on_easy_pressed"]
 [connection signal="pressed" from="VBoxContainer/NormalButton" to="." method="_on_normal_pressed"]

@@ -15,3 +15,11 @@ func _on_settings_button_pressed() -> void:
 
 func _on_quit_button_pressed():
 	get_tree().quit()
+	
+func _on_joy_action(action: String) -> void:
+	print("joy action: ", action)
+	if action == "confirm":
+		var focused := get_viewport().gui_get_focus_owner()
+		print("focused: ", focused)
+		if focused is Button:
+			focused.emit_signal("pressed")

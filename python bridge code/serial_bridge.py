@@ -68,6 +68,8 @@ def main():
     # open serial
     try:
         ser = serial.Serial(serial_port, args.baud, timeout=0.001)
+        #ser.dtr = False
+        #ser.rts = False
     except serial.SerialException as e:
         print(f"ERROR: Cannot open {serial_port}: {e}")
         sys.exit(1)
@@ -134,7 +136,7 @@ def main():
             if line:
                 decoded = line.decode("utf-8", errors="replace").strip()
                 if decoded:
-                    #print(f"  MSP430 -> {decoded}")
+                    print(f"  MSP430 -> {decoded}")
 
                     # forward to all godot clients
                     msg = (decoded + "\n").encode("utf-8")
