@@ -94,7 +94,7 @@ var _sorted_combos: Array = []
 
 # ─── Ready ─────────────────────────────────────────────────────────────────────
 func _ready() -> void:
-	add_to_group("joystick_controller")          # NEW
+	add_to_group("joystick_controller")
 	_sorted_combos = combos.keys()
 	_sorted_combos.sort_custom(func(a, b): return a.size() > b.size())
 
@@ -383,11 +383,15 @@ func _serial_parse(line: String) -> void:
 		emit_signal("action_pressed", _dir_to_action(dir))
 	_serial_prev_dir = dir
 
+	# ── FIX: Button now toggles Action Mode (matching Space/Enter behaviour). ──
+	# "confirm" is then emitted if we just entered Action Mode, so any listener
+	# waiting for a confirm immediately inside Action Mode still receives it.
 	if btn and not _serial_prev_btn:
-		if _action_mode:
-			emit_signal("action_pressed", "confirm")
 		if debug_mode:
 			print_rich("[color=magenta]Serial: button pressed[/color]")
+		toggle_action_mode()
+		if _action_mode:
+			emit_signal("action_pressed", "confirm")
 	_serial_prev_btn = btn
 
 ## Send a raw command to the MSP430.
