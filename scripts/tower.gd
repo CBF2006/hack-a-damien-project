@@ -1,18 +1,18 @@
 extends Node2D
 
-@export var base_damage: int = 10
+@export var base_damage: int = 2
 @export var base_range: float = 98.0
 @export var base_fire_rate: float = 1.5
 @export var base_health: int = 20
-@export var damage_per_level: int = 5
 @export var range_per_level: float = 14.0
 @export var fire_rate_reduction_per_level: float = 0.15
 @export var health_per_level: int = 8
 @export var max_level: int = 3
+@export var upgrade_costs: Array = [50, 100, 200]
 
 var projectile_scene: PackedScene = preload("res://scenes/laser.tscn")
 
-var damage: int = 10
+var damage: int = 2
 var fire_rate: float = 1.5
 var tower_range: float = 98.0
 var max_health: int = 20
@@ -40,19 +40,23 @@ func configure_tower() -> void:
 
 
 func set_spawned_from_spot(_spot: Node) -> void:
-	# Reserved for future ownership logic. Keeping the hook here makes the tower
-	# scene self-contained without forcing the spot node to know tower internals.
 	pass
 
 
 func upgrade_tower() -> bool:
 	if level >= max_level:
 		return false
-
+	total_invested += upgrade_costs[level]
 	level += 1
-	total_invested += 20
 	_apply_stats(true)
 	return true
+
+
+# Returns cost of next upgrade, or -1 if already maxed.
+func get_upgrade_cost() -> int:
+	if level >= max_level:
+		return -1
+	return upgrade_costs[level]
 
 
 func get_sell_refund() -> int:
@@ -78,7 +82,8 @@ func _process(delta: float) -> void:
 
 
 func _apply_stats(reset_health: bool = false) -> void:
-	damage = base_damage + (damage_per_level * level)
+	# Damage doubles each level: 2 -> 4 -> 8 -> 16
+	damage = int(base_damage * pow(2.0, level))
 	tower_range = base_range + (range_per_level * level)
 	fire_rate = max(0.25, base_fire_rate - (fire_rate_reduction_per_level * level))
 	max_health = base_health + (health_per_level * level)
