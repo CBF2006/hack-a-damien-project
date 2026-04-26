@@ -3,10 +3,8 @@ extends Node2D
 @export var base_damage: int = 2
 @export var base_range: float = 98.0
 @export var base_fire_rate: float = 1.5
-@export var base_health: int = 20
 @export var range_per_level: float = 14.0
 @export var fire_rate_reduction_per_level: float = 0.15
-@export var health_per_level: int = 8
 @export var max_level: int = 3
 @export var upgrade_costs: Array = [50, 100, 200]
 
@@ -15,8 +13,6 @@ var projectile_scene: PackedScene = preload("res://scenes/laser.tscn")
 var damage: int = 2
 var fire_rate: float = 1.5
 var tower_range: float = 98.0
-var max_health: int = 20
-var current_health: int = 20
 var level: int = 0
 var total_invested: int = 25
 
@@ -35,8 +31,7 @@ func _ready() -> void:
 func configure_tower() -> void:
 	level = 0
 	total_invested = 25
-	current_health = base_health
-	_apply_stats(true)
+	_apply_stats()
 
 
 func set_spawned_from_spot(_spot: Node) -> void:
@@ -48,11 +43,10 @@ func upgrade_tower() -> bool:
 		return false
 	total_invested += upgrade_costs[level]
 	level += 1
-	_apply_stats(true)
+	_apply_stats()
 	return true
 
 
-# Returns cost of next upgrade, or -1 if already maxed.
 func get_upgrade_cost() -> int:
 	if level >= max_level:
 		return -1
@@ -63,12 +57,6 @@ func get_sell_refund() -> int:
 	return int(total_invested * 0.65)
 
 
-func take_damage(amount: int) -> void:
-	current_health = max(0, current_health - amount)
-	if current_health == 0:
-		queue_free()
-
-
 func _process(delta: float) -> void:
 	timer += delta
 	_refresh_target()
@@ -77,18 +65,31 @@ func _process(delta: float) -> void:
 		return
 
 	if timer >= fire_rate:
-		shoot()
+		_attack()
 		timer = 0.0
 
 
-func _apply_stats(reset_health: bool = false) -> void:
+# Override this in subclasses to define unique tower attack behaviour.
+func _attack() -> void:
+	shoot()
+
+
+func shoot() -> void:
+	if target == null:
+		return
+
+	var projectile := projectile_scene.instantiate()
+	get_parent().add_child(projectile)
+	projectile.global_position = global_position
+	projectile.target = target
+	projectile.set("damage", damage)
+
+
+func _apply_stats() -> void:
 	# Damage doubles each level: 2 -> 4 -> 8 -> 16
 	damage = int(base_damage * pow(2.0, level))
 	tower_range = base_range + (range_per_level * level)
 	fire_rate = max(0.25, base_fire_rate - (fire_rate_reduction_per_level * level))
-	max_health = base_health + (health_per_level * level)
-	if reset_health:
-		current_health = max_health
 	if sprite != null:
 		sprite.frame = min(level, 2)
 		sprite.scale = Vector2.ONE * (1.0 + (0.05 * level))
@@ -118,17 +119,6 @@ func _refresh_target() -> void:
 			best_target = candidate
 
 	target = best_target
-
-
-func shoot() -> void:
-	if target == null:
-		return
-
-	var projectile := projectile_scene.instantiate()
-	get_parent().add_child(projectile)
-	projectile.global_position = global_position
-	projectile.target = target
-	projectile.set("damage", damage)
 
 
 func _on_area_2d_body_entered(body: Node) -> void:

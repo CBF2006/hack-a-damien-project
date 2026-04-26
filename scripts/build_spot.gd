@@ -22,6 +22,13 @@ func has_tower() -> bool:
 	return is_instance_valid(tower_instance)
 
 
+func place_tower_type(scene: PackedScene) -> void:
+	var prev := tower_scene
+	tower_scene = scene
+	_place_tower()
+	tower_scene = prev
+
+
 func _place_tower() -> void:
 	if has_tower():
 		_show_feedback("Spot already occupied")

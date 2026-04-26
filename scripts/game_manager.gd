@@ -17,6 +17,7 @@ var player_money: int = STARTING_MONEY_NORMAL
 var difficulty: int = 1
 var _ended: bool = false
 
+
 func setup(diff: int) -> void:
 	difficulty = diff
 	_ended = false
@@ -34,6 +35,7 @@ func setup(diff: int) -> void:
 	health_changed.emit(player_health, max_health)
 	money_changed.emit(player_money)
 
+
 func enemy_reached_end() -> void:
 	if _ended:
 		return
@@ -43,12 +45,14 @@ func enemy_reached_end() -> void:
 		_ended = true
 		game_over_triggered.emit()
 
+
 func check_victory(wave: int) -> void:
 	if _ended:
 		return
 	if wave > VICTORY_WAVE:
 		_ended = true
 		victory_triggered.emit()
+
 
 func reset() -> void:
 	_ended = false
