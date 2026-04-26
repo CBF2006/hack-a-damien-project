@@ -1,9 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cgdoqvsjlhfcp"]
 
-[ext_resource type="Script" path="res://scripts/game_settings.gd" id="1_settings"]
+[ext_resource type="Script" uid="uid://crmx5j7ka3p2n" path="res://scripts/game_settings.gd" id="1_settings"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="2_bg"]
 
-[node name="GameSettings" type="Control"]
+[node name="GameSettings" type="Control" unique_id=1006939584]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,13 +14,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_settings")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=52929549]
 layout_mode = 1
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("2_bg")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1924814472]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 5.0
@@ -28,38 +28,38 @@ offset_right = 1154.0
 offset_bottom = 652.0
 theme_override_constants/separation = 18
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=289224172]
 layout_mode = 2
 text = "GAME SETTINGS"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 52
 
-[node name="DifficultyLabel" type="Label" parent="VBoxContainer"]
+[node name="DifficultyLabel" type="Label" parent="VBoxContainer" unique_id=338052780]
 layout_mode = 2
 text = "Select Difficulty:"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 26
 
-[node name="EasyButton" type="Button" parent="VBoxContainer"]
+[node name="EasyButton" type="Button" parent="VBoxContainer" unique_id=1848568331]
 layout_mode = 2
 text = "Easy  —  30 HP"
 
-[node name="NormalButton" type="Button" parent="VBoxContainer"]
+[node name="NormalButton" type="Button" parent="VBoxContainer" unique_id=1680642774]
 layout_mode = 2
 text = "Normal  —  20 HP"
 
-[node name="HardButton" type="Button" parent="VBoxContainer"]
+[node name="HardButton" type="Button" parent="VBoxContainer" unique_id=1373206906]
 layout_mode = 2
 text = "Hard  —  10 HP"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=706226911]
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="VBoxContainer"]
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1029535024]
 layout_mode = 2
 text = "START GAME"
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=723318483]
 layout_mode = 2
 text = "Back"
 

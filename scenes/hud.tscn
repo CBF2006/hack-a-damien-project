@@ -3,25 +3,25 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-content_margin_left = 10.0
-content_margin_top = 8.0
-content_margin_right = 10.0
-content_margin_bottom = 8.0
 bg_color = Color(0.08, 0.08, 0.08, 0.78)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.2, 0.2, 0.2, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
+bg_color = Color(0.82, 0.12, 0.12, 1.0)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
-bg_color = Color(0.82, 0.12, 0.12, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.2, 0.2, 0.2, 1.0)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -41,21 +41,21 @@ theme_override_constants/separation = 6
 
 [node name="WaveLabel" type="Label" parent="HUDPanel/VBoxContainer" unique_id=1395945321]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 18
 text = "Wave: 1 / 10"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 
 [node name="HealthBar" type="ProgressBar" parent="HUDPanel/VBoxContainer" unique_id=1116094573]
-custom_minimum_size = Vector2(240, 22)
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
+custom_minimum_size = Vector2(240, 22)
 max_value = 20.0
 value = 20.0
 show_percentage = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
 
 [node name="HealthLabel" type="Label" parent="HUDPanel/VBoxContainer" unique_id=1425975528]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.85, 0.85, 1)
-theme_override_font_sizes/font_size = 16
 text = "HP: 20 / 20"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.85, 0.85, 1)
