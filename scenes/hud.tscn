@@ -27,6 +27,17 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_command_panel"]
+bg_color = Color(0.05, 0.1, 0.08, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+
 [node name="HUD" type="CanvasLayer" unique_id=1559649901]
 script = ExtResource("1_hud")
 
@@ -59,3 +70,17 @@ layout_mode = 2
 text = "HP: 20 / 20"
 theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1, 0.85, 0.85, 1)
+
+[node name="CommandPanel" type="PanelContainer" parent="." unique_id=1484739201]
+offset_left = 16.0
+offset_top = 136.0
+offset_right = 420.0
+offset_bottom = 184.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_command_panel")
+
+[node name="CommandLabel" type="Label" parent="CommandPanel" unique_id=2043040725]
+layout_mode = 2
+text = "Hover a spot. Up-Up places a tower."
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.88, 1, 0.93, 1)

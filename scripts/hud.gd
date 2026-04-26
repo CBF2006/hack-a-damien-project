@@ -3,6 +3,7 @@ extends CanvasLayer
 @onready var health_bar: ProgressBar = $HUDPanel/VBoxContainer/HealthBar
 @onready var health_label: Label = $HUDPanel/VBoxContainer/HealthLabel
 @onready var wave_label: Label = $HUDPanel/VBoxContainer/WaveLabel
+@onready var command_label: Label = $CommandPanel/CommandLabel
 
 func _ready() -> void:
 	GameManager.health_changed.connect(_on_health_changed)
@@ -15,3 +16,15 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 func set_wave(wave: int) -> void:
 	wave_label.text = "Wave: %d / %d" % [wave, GameManager.VICTORY_WAVE]
+
+
+func show_command_feedback(message: String) -> void:
+	if command_label != null:
+		command_label.text = message
+		command_label.modulate = Color(0.95, 0.95, 0.95)
+
+
+func show_tutorial_hint(message: String) -> void:
+	if command_label != null:
+		command_label.text = message
+		command_label.modulate = Color(0.75, 1.0, 0.9)

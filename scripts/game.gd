@@ -18,6 +18,7 @@ func _ready() -> void:
 
 	GameManager.game_over_triggered.connect(_on_game_over)
 	GameManager.victory_triggered.connect(_on_victory)
+	show_tutorial_hint("Hover a spot. Up-Up builds. Up-Down upgrades. Down-Down-Down sells.")
 
 	start_wave()
 
@@ -25,6 +26,7 @@ func start_wave() -> void:
 	if not game_active:
 		return
 	hud_instance.set_wave(wave)
+	show_tutorial_hint("Build, upgrade, and sell with short joystick combos.")
 	enemies_alive = enemies_to_spawn
 
 	for i in range(enemies_to_spawn):
@@ -61,3 +63,13 @@ func _on_game_over() -> void:
 func _on_victory() -> void:
 	game_active = false
 	get_tree().change_scene_to_file("res://scenes/victory.tscn")
+
+
+func show_command_feedback(message: String) -> void:
+	if hud_instance != null and hud_instance.has_method("show_command_feedback"):
+		hud_instance.show_command_feedback(message)
+
+
+func show_tutorial_hint(message: String) -> void:
+	if hud_instance != null and hud_instance.has_method("show_tutorial_hint"):
+		hud_instance.show_tutorial_hint(message)

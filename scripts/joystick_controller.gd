@@ -71,10 +71,10 @@ var combos := {
 	["right", "left", "right", "left"]: "open_menu",
 	["left",  "left", "right", "right"]: "example_llrr",   # longer — listed first
 	["left",  "left", "right"]:          "example_llr",    # shorter prefix share
-	["up",    "up"]:                     "open_radial_menu",
-	["down",  "down", "down"]:           "sell_tower",
-	["up",    "right"]:                  "place_tower",
-	["down",  "up"]:                     "tower_upgrade",
+	["up",    "up"]:                      "place_tower",
+	["up",    "down"]:                    "tower_upgrade",
+	["down",  "down", "down"]:          "sell_tower",
+	["right", "right"]:                  "open_radial_menu",
 }
 
 # Sorted combo keys, longest first — built once in _ready so we never re-sort.
@@ -495,9 +495,9 @@ func _trigger_combo(combo_name: String) -> void:
 	match combo_name:
 		"open_menu":          print_rich("[color=green]→ would open menu[/color]")
 		"open_radial_menu":   print_rich("[color=green]→ would open radial menu[/color]")
-		"tower_upgrade":      print_rich("[color=green]→ would upgrade tower[/color]")
-		"sell_tower":         print_rich("[color=green]→ would sell tower[/color]")
-		"place_tower":        print_rich("[color=green]→ would place tower[/color]")
+		"tower_upgrade":      print_rich("[color=green]→ upgrade verb[/color]")
+		"sell_tower":         print_rich("[color=green]→ sell verb[/color]")
+		"place_tower":        print_rich("[color=green]→ place verb[/color]")
 		"example_llrr":       print_rich("[color=green]→ LLRR combo fired[/color]")
 		"example_llr":        print_rich("[color=green]→ LLR combo fired[/color]")
 

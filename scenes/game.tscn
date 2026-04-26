@@ -7,10 +7,12 @@
 [ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scenes/select.gd" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scripts/select.gd" id="5_iywne"]
+[ext_resource type="Script" path="res://scripts/build_spot.gd" id="6_buildspot"]
 [ext_resource type="Texture2D" uid="uid://ej8vfennu7c8" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0000.png" id="6_p57ef"]
 [ext_resource type="Texture2D" uid="uid://ehvu7m4bfkx6" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0001.png" id="7_0tnpc"]
 [ext_resource type="Texture2D" uid="uid://c61lkfn4mji5p" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0002.png" id="8_vtaks"]
 [ext_resource type="Texture2D" uid="uid://bw00f8rfqp3d0" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0003.png" id="9_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://qs5cn6wljqu5" path="res://scenes/ui/joystick_controller.tscn" id="10_joy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -1807,6 +1809,9 @@ texture = ExtResource("1_uwrxv")
 38:59/0 = 0
 37:59/0 = 0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_buildspot"]
+size = Vector2(56, 56)
+
 [sub_resource type="TileSet" id="TileSet_lnu2h"]
 sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 
@@ -1869,18 +1874,58 @@ script = ExtResource("5_iywne")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=322594139]
 position = Vector2(289, 360)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/ActionArea"]
+shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D2" type="Node2D" parent="." unique_id=550790662]
 position = Vector2(478, 430)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D2"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/ActionArea"]
+shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D3" type="Node2D" parent="." unique_id=423516895]
 position = Vector2(605, 299)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D3"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D3/ActionArea"]
+shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D4" type="Node2D" parent="." unique_id=1405275303]
 position = Vector2(802, 172)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D4"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D4/ActionArea"]
+shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Node2D5" type="Node2D" parent="." unique_id=1216781576]
 position = Vector2(867, 363)
+script = ExtResource("6_buildspot")
+
+[node name="ActionArea" type="Area2D" parent="Node2D5"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D5/ActionArea"]
+shape = SubResource("RectangleShape2D_buildspot")
 
 [node name="Cursor" type="AnimatedSprite2D" parent="." unique_id=573194015]
 position = Vector2(-33, 33)
@@ -1904,3 +1949,5 @@ offset_bottom = 23.0
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="JoystickController" parent="." instance=ExtResource("10_joy")]
