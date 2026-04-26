@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://blitianylfgky"]
+
+[ext_resource type="PackedScene" path="res://scenes/tower.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/tower1.gd" id="2_script"]
+
+[node name="tower1" unique_id=867968051 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
