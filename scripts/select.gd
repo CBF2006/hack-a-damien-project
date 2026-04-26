@@ -10,8 +10,16 @@ var menu_w_options = ["Tower 1", "Tower 2", "Tower 3"]
 var menu_s_options = ["Upgrade 1", "Upgrade 2", "Upgrade 3"]
 var menu_index = 0
 
+var tower_costs = [50, 100, 150]
+var upgrade_costs = [30, 60, 90]
+
 var shop_menu
 var item_label
+
+var money = 1000
+var messageLabel
+
+var message_timer
 
 func _ready():
 	cursor = get_node("../Cursor")
@@ -25,6 +33,12 @@ func _ready():
 	]
 	shop_menu = get_node("../ShopMenu")
 	item_label = get_node("../ShopMenu/Panel/ItemLabel")
+	
+	messageLabel = get_node("../ShopMenu/Panel/messageLabel")
+	messageLabel.text = ""
+	
+	message_timer = get_node("../ShopMenu/Panel/message_timer")
+	message_timer.timeout.connect(_on_message_timeout)
 
 func open_shop(options):
 	menu_index = 0
@@ -63,8 +77,7 @@ func _unhandled_input(event):
 			if event.keycode == KEY_W:
 				close_shop()
 			if event.keycode == KEY_S:
-				print("Selected item: ", menu_w_options[menu_index])
-				close_shop()
+				try_buy(tower_costs[menu_index], menu_w_options[menu_index])
 
 		elif state == "towerMenu":
 			if event.keycode == KEY_A:
@@ -74,8 +87,26 @@ func _unhandled_input(event):
 			if event.keycode == KEY_S:
 				close_shop()
 			if event.keycode == KEY_W:
-				print("Selected item: ", menu_s_options[menu_index])
-				close_shop()
+				try_buy(upgrade_costs[menu_index], menu_s_options[menu_index])
 
 func update_cursor():
 	cursor.position = spots[current_index].position
+
+func _on_message_timeout():
+	messageLabel.text = ""
+
+func enemy_killed():
+	money += 10 
+	updateMoney()
+
+func try_buy(cost, item_name):
+	if money >= cost:
+		money -= cost
+		updateMoney()
+		close_shop()
+	else:
+		messageLabel.text = "Not enough cash!"
+		message_timer.start()
+
+func updateMoney():
+	print("Money: $", money)
