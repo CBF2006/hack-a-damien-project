@@ -3,8 +3,13 @@
 [ext_resource type="Script" uid="uid://c0fw24mf42nia" path="res://scripts/game.gd" id="1_iywne"]
 [ext_resource type="Texture2D" uid="uid://dfullu3wsmqkt" path="res://assets/TileMap_SF/tileset_sf.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://rbp0s2hsuryd" path="res://assets/TileMap_SF/Grafika/bg.png" id="1_yqjtg"]
-[ext_resource type="PackedScene" uid="uid://toxf3fadld6g" path="res://scenes/enemy.tscn" id="3_lnu2h"]
-[ext_resource type="PackedScene" uid="uid://c7vstn0wkedos" path="res://scenes/tower.tscn" id="5_iywne"]
+[ext_resource type="Script" uid="uid://eh75hbi1cd0v" path="res://scenes/path_follow_2d.gd" id="3_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://ca17fbc0adwlg" path="res://scenes/enemy.tscn" id="3_lnu2h"]
+[ext_resource type="Script" uid="uid://b1iytsnn7dhcw" path="res://scenes/select.gd" id="5_iywne"]
+[ext_resource type="Texture2D" uid="uid://ej8vfennu7c8" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0000.png" id="6_p57ef"]
+[ext_resource type="Texture2D" uid="uid://ehvu7m4bfkx6" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0001.png" id="7_0tnpc"]
+[ext_resource type="Texture2D" uid="uid://c61lkfn4mji5p" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0002.png" id="8_vtaks"]
+[ext_resource type="Texture2D" uid="uid://bw00f8rfqp3d0" path="res://assets/TileMap_SF/Grafika/Point_mouse/point0003.png" id="9_kvpfn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -1810,6 +1815,26 @@ _data = {
 }
 point_count = 10
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_dinhu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_p57ef")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_0tnpc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_vtaks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_kvpfn")
+}],
+"loop": true,
+"name": &"choose",
+"speed": 3.0
+}]
+
 [node name="game" type="Node2D" unique_id=1845552477]
 script = ExtResource("1_iywne")
 enemy_scene = ExtResource("3_lnu2h")
@@ -1836,5 +1861,27 @@ position = Vector2(224, 537)
 rotation = -1.5748448
 loop = false
 
-[node name="tower" parent="." unique_id=1611531955 instance=ExtResource("5_iywne")]
-position = Vector2(608, 295)
+[node name="Enemy" parent="Path2D/PathFollow2D" unique_id=1644159487 instance=ExtResource("3_lnu2h")]
+
+[node name="Select" type="Node" parent="." unique_id=1905010894]
+script = ExtResource("5_iywne")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=322594139]
+position = Vector2(289, 360)
+
+[node name="Node2D2" type="Node2D" parent="." unique_id=550790662]
+position = Vector2(478, 430)
+
+[node name="Node2D3" type="Node2D" parent="." unique_id=423516895]
+position = Vector2(605, 299)
+
+[node name="Node2D4" type="Node2D" parent="." unique_id=1405275303]
+position = Vector2(802, 172)
+
+[node name="Node2D5" type="Node2D" parent="." unique_id=1216781576]
+position = Vector2(867, 363)
+
+[node name="Cursor" type="AnimatedSprite2D" parent="." unique_id=573194015]
+position = Vector2(-33, 33)
+sprite_frames = SubResource("SpriteFrames_dinhu")
+animation = &"choose"
