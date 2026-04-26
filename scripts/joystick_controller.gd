@@ -228,7 +228,14 @@ func _process(delta: float) -> void:
 				_held_timer = 0.0
 				if current_dir != Vector2.ZERO:
 					emit_signal("direction_changed", current_dir)
-					
+	
+	
+	# 3.5 Apply serial direction if active
+	if _serial_prev_dir != Vector2.ZERO:
+		current_dir = _serial_prev_dir
+	
+	
+	
 	# 4. Movement Execution
 	if current_dir != Vector2.ZERO:
 		# Move the knob
@@ -282,7 +289,9 @@ func _serial_process(delta: float) -> void:
 				_serial_reconnect_timer = 0.0
 				if debug_mode:
 					print_rich("[color=green]Serial: MSP430 connected via bridge[/color]")
-			_serial_read()
+			# Read ALL pending data, not just one chunk
+			while _serial_peer.get_available_bytes() > 0:
+				_serial_read()
 
 		StreamPeerTCP.STATUS_NONE, StreamPeerTCP.STATUS_ERROR:
 			if _serial_connected:
@@ -338,9 +347,8 @@ func _serial_parse(line: String) -> void:
 	elif sy == 2: dir.y = 1.0   # DOWN
 
 	# Always emit direction_changed for cursor movement
-	if dir != current_dir:
-		current_dir = dir
-		_last_logged_dir = dir
+	# Emit direction_changed on change
+	if dir != _serial_prev_dir:
 		emit_signal("direction_changed", dir)
 
 	# Only emit action_pressed on direction CHANGE (edge detection for combos)
