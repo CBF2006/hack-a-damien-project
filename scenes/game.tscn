@@ -1865,8 +1865,6 @@ position = Vector2(224, 537)
 rotation = -1.5748448
 loop = false
 
-[node name="Enemy" parent="Path2D/PathFollow2D" unique_id=1644159487 instance=ExtResource("3_lnu2h")]
-
 [node name="Select" type="Node" parent="." unique_id=1905010894]
 script = ExtResource("5_iywne")
 
